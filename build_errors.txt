@@ -1,0 +1,54 @@
+﻿
+> evidence-dapp@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.2.3 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 6.7s
+  Running TypeScript ...
+node.exe : Failed to type 
+check.
+At C:\Program 
+Files\nodejs\npm.ps1:29 
+char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (F  
+  ailed to type check.:   
+ String) [], RemoteExc    
+eption
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+
+./src/lib/db-helpers.ts:8:
+3
+Type error: Module 
+'"@prisma/client"' has no 
+exported member 'Role'.
+
+  [90m 6 |[0m 
+[36mimport[0m { prisma 
+} [36mfrom[0m 
+[32m'./prisma'[0m;
+  [90m 7 |[0m 
+[36mimport[0m {
+[31m[1m>[0m [90m 8 
+|[0m   [33mRole[0m,
+  [90m   |[0m   
+[31m[1m^[0m
+  [90m 9 |[0m   
+[33mEvidenceStatus[0m,
+  [90m10 |[0m   
+[33mEvidenceType[0m,
+  [90m11 |[0m   
+[33mCaseStatus[0m,
+Next.js build worker 
+exited with code: 1 and 
+signal: null
