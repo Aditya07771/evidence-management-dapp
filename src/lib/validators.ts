@@ -89,3 +89,15 @@ export function validate<T>(schema: z.ZodSchema<T>, data: unknown): {
         throw error;
     }
 }
+
+// ... existing imports ...
+
+export const updateCaseSchema = z.object({
+    title: z.string().min(5, 'Title must be at least 5 characters').optional(),
+    description: z.string().optional(),
+});
+
+export const updateCaseStatusSchema = z.object({
+    status: z.enum(['OPEN', 'CLOSED', 'ARCHIVED']),
+    reason: z.string().min(5, 'Reason must be at least 5 characters').optional(),
+});
