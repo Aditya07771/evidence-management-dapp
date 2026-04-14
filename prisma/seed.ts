@@ -1,159 +1,96 @@
-/**
- * Test all utility functions
- * Verifies hash, auth, and contract utilities work correctly
- */
+import { PrismaClient, Role, CaseStatus, EvidenceType, EvidenceStatus } from '@prisma/client';
+import { hashPassword } from '../src/lib/auth';
+import { hashFile } from '../src/lib/hash';
+import crypto from 'crypto';
 
-import {
-    hashFile,
-    hashText,
-    toBytes32,
-    isValidBytes32,
-    hashesMatch,
-    randomBytes32,
-} from '../src/lib/hash';
-import {
-    signToken,
-    verifyToken,
-    hashPassword,
-    comparePassword,
-    extractTokenFromHeader,
-    validatePassword,
-} from '../src/lib/auth';
-import { Role } from '@prisma/client';
-
-async function testHashUtilities() {
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  HASH UTILITIES TEST');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
-    // Test file hashing
-    const testBuffer = Buffer.from('test file content');
-    const fileHash = hashFile(testBuffer);
-    console.log('✓ File hash:', fileHash);
-    console.log('  Valid bytes32:', isValidBytes32(fileHash) ? '✅' : '❌');
-
-    // Test text hashing
-    const textHash = hashText('test string');
-    console.log('\n✓ Text hash:', textHash);
-    console.log('  Valid bytes32:', isValidBytes32(textHash) ? '✅' : '❌');
-
-    // Test toBytes32 alias
-    const bytes32 = toBytes32('CASE-2024-001');
-    console.log('\n✓ Case ID bytes32:', bytes32);
-
-    // Test hash comparison
-    const hash1 = randomBytes32();
-    const hash2 = hash1;
-    const hash3 = randomBytes32();
-    console.log('\n✓ Hash comparison:');
-    console.log('  Same hash:', hashesMatch(hash1, hash2) ? '✅' : '❌');
-    console.log('  Different hash:', !hashesMatch(hash1, hash3) ? '✅' : '❌');
-
-    console.log('\n✅ Hash utilities test passed\n');
-}
-
-async function testAuthUtilities() {
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  AUTH UTILITIES TEST');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
-    // Test JWT signing and verification
-    const payload = {
-        userId: 'test-user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        role: Role.INVESTIGATOR,
-    };
-
-    const token = signToken(payload);
-    console.log('✓ Generated JWT:', token.substring(0, 50) + '...');
-
-    const verified = verifyToken(token);
-    console.log('\n✓ Token verification:');
-    console.log('  Valid:', verified !== null ? '✅' : '❌');
-    console.log('  User ID matches:', verified?.userId === payload.userId ? '✅' : '❌');
-    console.log('  Email matches:', verified?.email === payload.email ? '✅' : '❌');
-
-    // Test token extraction
-    const authHeader = `Bearer ${token}`;
-    const extracted = extractTokenFromHeader(authHeader);
-    console.log('\n✓ Token extraction:', extracted === token ? '✅' : '❌');
-
-    // Test password hashing
-    const plainPassword = 'SecurePassword123!';
-    const hashedPassword = await hashPassword(plainPassword);
-    console.log('\n✓ Password hashed');
-
-    const isMatch = await comparePassword(plainPassword, hashedPassword);
-    console.log('  Comparison:', isMatch ? '✅' : '❌');
-
-    const isWrongMatch = await comparePassword('WrongPassword', hashedPassword);
-    console.log('  Wrong password rejected:', !isWrongMatch ? '✅' : '❌');
-
-    // Test password validation
-    const validationWeak = validatePassword('weak');
-    const validationStrong = validatePassword('StrongPass123!');
-    console.log('\n✓ Password validation:');
-    console.log('  Weak password rejected:', !validationWeak.isValid ? '✅' : '❌');
-    console.log('  Strong password accepted:', validationStrong.isValid ? '✅' : '❌');
-
-    console.log('\n✅ Auth utilities test passed\n');
-}
-
-async function testContractUtilities() {
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  CONTRACT UTILITIES TEST');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
-    try {
-        const {
-            ROLE_ADMIN,
-            ROLE_INVESTIGATOR,
-            ROLE_AUDITOR,
-            getRoleConstant,
-            parseEvidenceStatus,
-            parseEvidenceType,
-        } = await import('../src/lib/contract');
-
-        console.log('✓ Role constants:');
-        console.log('  ADMIN:', ROLE_ADMIN);
-        console.log('  INVESTIGATOR:', ROLE_INVESTIGATOR);
-        console.log('  AUDITOR:', ROLE_AUDITOR);
-
-        const roleFromName = getRoleConstant('ADMIN');
-        console.log('\n✓ Get role by name:', roleFromName === ROLE_ADMIN ? '✅' : '❌');
-
-        console.log('\n✓ Status parsing:');
-        console.log('  0 →', parseEvidenceStatus(0));
-        console.log('  1 →', parseEvidenceStatus(1));
-        console.log('  4 →', parseEvidenceStatus(4));
-
-        console.log('\n✓ Type parsing:');
-        console.log('  0 →', parseEvidenceType(0));
-        console.log('  1 →', parseEvidenceType(1));
-        console.log('  2 →', parseEvidenceType(2));
-
-        console.log('\n✅ Contract utilities loaded successfully');
-        console.log('⚠️  Full contract tests require deployed contract\n');
-    } catch (error: any) {
-        console.log('⚠️  Contract utilities not fully available');
-        console.log('   This is expected if contract not deployed yet');
-        console.log('   Error:', error.message, '\n');
-    }
-}
+const prisma = new PrismaClient();
 
 async function main() {
     console.log('\n╔════════════════════════════════════════╗');
-    console.log('║   UTILITIES TEST SUITE                 ║');
+    console.log('║   DATABASE SEEDING                     ║');
     console.log('╚════════════════════════════════════════╝\n');
 
-    await testHashUtilities();
-    await testAuthUtilities();
-    await testContractUtilities();
+    // Clean up existing data to prevent duplicates (optional, comment out in production)
+    console.log('Clearing old data...');
+    await prisma.custodyLog.deleteMany();
+    await prisma.verification.deleteMany();
+    await prisma.transferRequest.deleteMany();
+    await prisma.evidence.deleteMany();
+    await prisma.case.deleteMany();
+    await prisma.user.deleteMany();
+
+    // 1. Create a User (Investigator)
+    console.log('Creating users...');
+    const hashedPwd = await hashPassword('Admin123!');
+    const investigator = await prisma.user.create({
+        data: {
+            name: 'John Doe Investigates',
+            email: 'investigator@evidencesync.com',
+            passwordHash: hashedPwd,
+            badgeId: 'BDG-INV-001',
+            role: Role.INVESTIGATOR,
+        },
+    });
+
+    // 2. Create 5 Cases
+    console.log('Creating 5 Cases...');
+    const cases = [];
+    for (let i = 1; i <= 5; i++) {
+        const c = await prisma.case.create({
+            data: {
+                caseNumber: `CASE-2024-00${i}`,
+                title: `State vs. Suspect ${i}`,
+                description: `A detailed investigation file for case number ${i} involving digital and physical evidence.`,
+                status: CaseStatus.OPEN,
+            },
+        });
+        cases.push(c);
+    }
+
+    // 3. Create 5 Evidences
+    console.log('Creating 5 Evidences...');
+    const evidenceData = [
+        { title: 'Security Footage', type: EvidenceType.VIDEO },
+        { title: 'Financial Records', type: EvidenceType.DOCUMENT },
+        { title: 'Audio Recording Device', type: EvidenceType.PHYSICAL },
+        { title: 'Encrypted Hard Drive', type: EvidenceType.DIGITAL },
+        { title: 'Witness Testimony Transcripts', type: EvidenceType.DOCUMENT }
+    ];
+
+    for (let i = 0; i < 5; i++) {
+        const dummyFileContent = Buffer.from(`fake-file-content-${i}`);
+        const fileHash = hashFile(dummyFileContent);
+
+        await prisma.evidence.create({
+            data: {
+                caseId: cases[i].id,
+                title: evidenceData[i].title,
+                description: `Collected ${evidenceData[i].type} evidence related to ${cases[i].caseNumber}`,
+                evidenceType: evidenceData[i].type,
+                fileHash: fileHash,
+                fileURI: `/uploads/mock-${i}.pdf`,
+                fileName: `mock-${i}.pdf`,
+                fileSize: 1024 * i + 1024,
+                locationText: 'Evidence Locker Room B',
+                collectedAt: new Date(Date.now() - 100000000 * (i + 1)),
+                status: EvidenceStatus.COLLECTED,
+                collectedById: investigator.id,
+                currentOwnerId: investigator.id,
+                isSensitive: i % 2 === 0,
+            },
+        });
+    }
 
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  ALL UTILITY TESTS COMPLETE ✅');
+    console.log('  SEEDING COMPLETE ✅');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 }
 
-main().catch(console.error);
+main()
+    .catch((e) => {
+        console.error(e);
+        process.exit(1);
+    })
+    .finally(async () => {
+        await prisma.$disconnect();
+    });

@@ -8,6 +8,12 @@
   --color-brand-700: #1d4ed8;
   --color-brand-900: #1e3a8a;
   
+  --color-slate-50:  #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
   --color-slate-800: #1e293b;
   --color-slate-900: #0f172a;
 }
@@ -19,6 +25,52 @@
   
   body {
     @apply bg-slate-50 text-slate-800 antialiased;
+  }
+
+  .container {
+    @apply max-w-7xl mx-auto px-6 py-8;
+  }
+
+  h1 {
+    @apply text-3xl font-bold text-slate-900 mb-6;
+  }
+  h2 {
+    @apply text-xl font-bold text-slate-800 mt-8 mb-4;
+  }
+  h3 {
+    @apply text-lg font-bold text-slate-700 mt-6 mb-3;
+  }
+  
+  table {
+    @apply w-full border-collapse bg-white rounded-xl shadow-sm overflow-hidden my-6 border border-slate-200;
+  }
+  th {
+    @apply bg-slate-100 text-slate-700 text-left px-4 py-3 font-semibold border-b border-slate-200 text-sm;
+  }
+  td {
+    @apply border-b border-slate-100 px-4 py-3 text-sm text-slate-600 align-middle;
+  }
+  tr:last-child td {
+    @apply border-b-0;
+  }
+  tr:hover td {
+    @apply bg-slate-50;
+  }
+
+  button, input[type="submit"] {
+    @apply bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors shadow-sm;
+  }
+  
+  input:not([type="submit"]), textarea, select {
+    @apply w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all mb-4;
+  }
+
+  pre {
+    @apply bg-slate-800 text-slate-200 p-4 rounded-xl overflow-x-auto text-sm my-4 shadow-inner;
+  }
+  
+  a {
+    @apply text-brand-600 hover:text-brand-700 font-medium transition-colors;
   }
 }
 
