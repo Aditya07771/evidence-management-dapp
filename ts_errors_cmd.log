@@ -1,0 +1,6 @@
+scripts/test-auth-api.ts(6,7): error TS2451: Cannot redeclare block-scoped variable 'API_BASE'.
+scripts/test-auth-api.ts(15,16): error TS2393: Duplicate function implementation.
+scripts/test-cases-api.ts(6,7): error TS2451: Cannot redeclare block-scoped variable 'API_BASE'.
+scripts/test-cases-api.ts(15,16): error TS2393: Duplicate function implementation.
+src/lib/api-helpers.ts(58,29): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/lib/api-helpers.ts(58,41): error TS7006: Parameter 'err' implicitly has an 'any' type.

@@ -10,6 +10,7 @@ import {
     withErrorHandler,
     successResponse,
     errorResponse,
+    validationErrorResponse,
     getAuthUserWithRole,
     parseBody,
 } from '@/lib/api-helpers';
@@ -120,7 +121,7 @@ export const PATCH = withErrorHandler(
         const body = await parseBody(req);
         const validation = updateCaseSchema.safeParse(body);
         if (!validation.success) {
-            return errorResponse('Validation failed', 400, validation.error.errors);
+            return validationErrorResponse(validation.error);
         }
 
         const { title, description } = validation.data;

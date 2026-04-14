@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorResponse, ApiSuccessResponse, JWTPayload } from './types';
 import { requireAuth, requireRole, AuthError } from './auth';
 import { Role } from '@prisma/client';
-import { ZodError } from 'zod';
+import { z, ZodError } from 'zod';
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // RESPONSE BUILDERS
@@ -53,9 +53,9 @@ export function errorResponse(
  * Validation error response (Zod)
  */
 export function validationErrorResponse(
-    zodError: ZodError
+    zodError: z.ZodError<any>
 ): NextResponse<ApiErrorResponse> {
-    const errors = zodError.errors.map((err) => ({
+    const errors = zodError.issues.map((err: z.ZodIssue) => ({
         field: err.path.join('.'),
         message: err.message,
     }));
@@ -230,10 +230,10 @@ export function handleOPTIONS(): NextResponse {
 /**
  * Validate request body against Zod schema
  */
-export async function validateBody<T>(
+export async function validateBody<T extends z.ZodTypeAny>(
     req: NextRequest,
-    schema: any
-): Promise<T> {
+    schema: T
+): Promise<z.infer<T>> {
     const body = await parseBody(req);
     return schema.parse(body);
 }

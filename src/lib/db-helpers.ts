@@ -566,7 +566,7 @@ export async function createAuditLog(data: {
   return prisma.auditLog.create({
     data: {
       ...data,
-      metadata: data.metadata as Prisma.JsonValue,
+      metadata: data.metadata ? (data.metadata as Prisma.InputJsonValue) : undefined,
     },
   });
 }
