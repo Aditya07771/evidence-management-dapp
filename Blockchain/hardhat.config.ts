@@ -7,8 +7,17 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const privateKey = process.env.PRIVATE_KEY?.trim();
-const sepoliaAccounts = privateKey && /^0x[0-9a-fA-F]{64}$/.test(privateKey) ? [privateKey] : [];
+/** Accepts PRIVATE_KEY with or without 0x prefix (64 hex chars). */
+function normalizePrivateKey(raw: string | undefined): string | null {
+  if (!raw) return null;
+  const s = raw.trim();
+  if (/^0x[0-9a-fA-F]{64}$/.test(s)) return s;
+  if (/^[0-9a-fA-F]{64}$/.test(s)) return `0x${s}`;
+  return null;
+}
+
+const sepoliaPk = normalizePrivateKey(process.env.PRIVATE_KEY);
+const sepoliaAccounts = sepoliaPk ? [sepoliaPk] : [];
 
 const config: HardhatUserConfig = {
   solidity: {

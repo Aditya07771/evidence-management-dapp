@@ -3,6 +3,7 @@
  * Run with: ts-node scripts/test-evidence-api.ts
  */
 
+export {};
 import * as fs from 'fs';
 import * as path from 'path';
 import FormData from 'form-data';

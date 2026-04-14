@@ -3,6 +3,7 @@
  * Run with: ts-node scripts/test-cases-api.ts
  */
 
+export {};
 const API_BASE = 'http://localhost:3000/api';
 
 interface ApiResponse {

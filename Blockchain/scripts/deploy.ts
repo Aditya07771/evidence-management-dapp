@@ -9,8 +9,16 @@ async function main() {
   console.log("  EVIDENCE REGISTRY DEPLOYMENT");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-  // Get deployer
-  const [deployer] = await ethers.getSigners();
+  // Get deployer (requires funded account + PRIVATE_KEY for remote networks)
+  const signers = await ethers.getSigners();
+  const deployer = signers[0];
+  if (!deployer) {
+    throw new Error(
+      "No deployer account: set PRIVATE_KEY in Blockchain/.env (64 hex chars, with or without 0x) " +
+        "and ensure networks.sepolia.accounts is non-empty in hardhat.config.ts."
+    );
+  }
+
   const balance = await ethers.provider.getBalance(deployer.address);
 
   console.log("Deploying with account:", deployer.address);

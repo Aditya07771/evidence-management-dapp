@@ -316,10 +316,3 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
         throw error;
     }
 });
-
-// Disable Next.js body parsing for file uploads
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};

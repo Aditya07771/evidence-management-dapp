@@ -3,11 +3,10 @@
  * Handle multipart file uploads and storage
  */
 
-import formidable, { File } from 'formidable';
 import { NextRequest } from 'next/server';
 import * as fs from 'fs';
 import * as path from 'path';
-import { hashFile, hashFileAsync } from './hash';
+import { hashFile } from './hash';
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // CONFIGURATION

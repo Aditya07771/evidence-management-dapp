@@ -4,8 +4,7 @@
  */
 
 import { ethers } from 'ethers';
-import * as fs from 'fs';
-import * as path from 'path';
+import artifact from '@/contracts/EvidenceRegistry.json';
 import {
     ContractCallResult,
     EvidenceOnChain,
@@ -32,18 +31,7 @@ if (!CONTRACT_ADDRESS) {
     console.warn('⚠️  CONTRACT_ADDRESS not set - contract calls will fail');
 }
 
-// Load ABI
-let contractABI: any[] = [];
-try {
-    const artifactPath = path.join(
-        process.cwd(),
-        'src/contracts/artifacts/contracts/EvidenceRegistry.sol/EvidenceRegistry.json'
-    );
-    const artifact = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
-    contractABI = artifact.abi;
-} catch (error) {
-    console.error('❌ Failed to load contract ABI:', error);
-}
+const contractABI = artifact.abi as ethers.InterfaceAbi;
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // PROVIDER & SIGNER

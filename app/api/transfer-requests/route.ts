@@ -72,7 +72,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
     const body = await parseBody(req);
     const validation = createRequestSchema.safeParse(body);
     if (!validation.success) {
-        return errorResponse('Validation failed', 400, validation.error.errors);
+        return errorResponse('Validation failed', 400, validation.error.issues);
     }
 
     const { evidenceId, proposedOwnerId, reason } = validation.data;

@@ -77,7 +77,7 @@ export const POST = withErrorHandler(
         const body = await parseBody(req);
         const validation = transferSchema.safeParse(body);
         if (!validation.success) {
-            return errorResponse('Validation failed', 400, validation.error.errors);
+            return errorResponse('Validation failed', 400, validation.error.issues);
         }
 
         const { toUserId, reason } = validation.data;
