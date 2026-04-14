@@ -514,16 +514,16 @@ contract EvidenceRegistry {
         Evidence storage ev = evidences[evidenceId];
 
         require(
-            _isValidTransition(ev.status, newStatus),
-            "EvidenceRegistry: invalid status transition"
-        );
-        require(
             ev.status != EvidenceStatus.Archived,
             "EvidenceRegistry: archived evidence is immutable"
         );
         require(
             ev.status != EvidenceStatus.Rejected,
             "EvidenceRegistry: rejected evidence cannot be updated"
+        );
+        require(
+            _isValidTransition(ev.status, newStatus),
+            "EvidenceRegistry: invalid status transition"
         );
 
         EvidenceStatus prev = ev.status;

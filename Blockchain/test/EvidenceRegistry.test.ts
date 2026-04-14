@@ -471,7 +471,8 @@ describe("EvidenceRegistry", function () {
           investigator1.address,
           investigator2.address,
           reasonHash,
-            anyValue()
+          anyValue()
+        );
     });
 
     it("should reject transfer to self", async function () {

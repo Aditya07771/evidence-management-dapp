@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "D:\\Projects\\evidence-dapp\\Blockchain\\contracts\\EvidenceRegistry.sol": {
-      "lastModificationDate": 1776180917388,
-      "contentHash": "0797362775375dc2525e74b0dd5ecaa0",
+      "lastModificationDate": 1776182404479,
+      "contentHash": "8dea1537aafd8811ddb9ec9e6f9a2ced",
       "sourceName": "contracts/EvidenceRegistry.sol",
       "solcConfig": {
         "version": "0.8.20",
