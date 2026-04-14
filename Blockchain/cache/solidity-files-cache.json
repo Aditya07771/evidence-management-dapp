@@ -1,0 +1,41 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "D:\\Projects\\evidence-dapp\\Blockchain\\contracts\\EvidenceRegistry.sol": {
+      "lastModificationDate": 1776180917388,
+      "contentHash": "0797362775375dc2525e74b0dd5ecaa0",
+      "sourceName": "contracts/EvidenceRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "EvidenceRegistry"
+      ]
+    }
+  }
+}

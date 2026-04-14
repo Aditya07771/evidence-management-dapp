@@ -7,6 +7,9 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
+const privateKey = process.env.PRIVATE_KEY?.trim();
+const sepoliaAccounts = privateKey && /^0x[0-9a-fA-F]{64}$/.test(privateKey) ? [privateKey] : [];
+
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.20",
@@ -25,7 +28,7 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       url: process.env.RPC_URL || "https://sepolia.infura.io/v3/",
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      accounts: sepoliaAccounts,
       chainId: 11155111,
     },
   },

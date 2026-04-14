@@ -1,6 +1,8 @@
-import { ethers } from "hardhat";
+import hardhat from "hardhat";
 import * as fs from "fs";
 import * as path from "path";
+
+const { ethers } = hardhat;
 
 async function main() {
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
